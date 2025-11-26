@@ -2,37 +2,30 @@
 
 import sys, os
 import os.path
+from pathlib import Path
 
 def create(isa,c,filename,lang):
     
+    out_path = Path(isa) / f"{isa}-{c}.rkt"
     if os.path.isfile("template/"+c+".rkt"):
         filename = "template/"+c+".rkt"
         fin = open(filename,"r")
-        fout = open(isa + "/" + isa + "-" + c + ".rkt","w")
         text = fin.read().replace("$-",isa+"-")
-        print >>fout, text
+        out_path.write_text(text)
         fin.close()
-        fout.close()
     else:
         fin = open(filename,"r")
-        fout = open(isa + "/" + isa + "-" + c + ".rkt","w")
         text = fin.read().replace("$1",isa).replace("$2",c)
-        print >>fout, "#lang", lang
-        print >>fout, text
+        out_path.write_text(f'#lang {lang}\n{text}')
         fin.close()
-        fout.close()
 
 def main(isa):
-    print "Create template files for", isa
+    print("Create template files for", isa)
     os.system("mkdir " + isa)
 
     for name in ["test-simulator.rkt", "test-search.rkt", "main.rkt", "optimize.rkt"]:
-        fin = open("template/" + name,"r")
-        fout = open(isa + "/" + name,"w")
-        text = fin.read().replace("$",isa)
-        print >>fout, text
-        fin.close()
-        fout.close()
+        text = input_path.read_text().replace('$', isa)
+        output_path.write_text(text)
 
     # racket
     for c in ["machine", "simulator-racket"]:
