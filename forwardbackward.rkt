@@ -119,6 +119,7 @@
     (define (sort-live x) x)
     (define (sort-live-bw x) x)
     (define (reduce-precision-assume x) x)
+    ;; This function sets all indices above `live` to #f in `state`.
     (define (mask-in state live #:keep-flag [keep #t])
       ;;(pretty-display `(mask-in ,state ,live))
       (define (f state live)
