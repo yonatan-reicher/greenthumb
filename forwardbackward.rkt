@@ -169,6 +169,39 @@
     (define c-behaviors 0)
     (define c-progs 0)
 
+    ;; Turn classes into a list '( (live1 pruning-info state nested-hash) ... )
+    (define (classes->list c)
+      (define ret (list))
+      (hash-for-each c
+        (lambda (k h)
+          (define live1 (list-ref k 0))
+          (define pruning-info (list-ref k 1))
+          ; For each key-value pair, print the key and recurse on the value.
+          (hash-for-each h
+            (lambda (state1 h)
+              (hash-for-each h
+                (lambda (state2 progs)
+                  (define entry (list live1 pruning-info state1 state2 progs))
+                  (set! ret (cons entry ret))))))))
+      ret)
+
+    (define (print-classes c)
+      (define l (classes->list c))
+      (for ([entry l])
+        (define live1 (list-ref entry 0))
+        (define pruning-info (list-ref entry 1))
+        (define state1 (list-ref entry 2))
+        (define state2 (list-ref entry 3))
+        (define progs (list-ref entry 4))
+        (printf "Live ~a \tPruning-info ~a\n" live1 pruning-info)
+        (printf "~a ⟼  ~a\n" state1 state2)
+        (define i 0)
+        (for ([prog progs])
+          (set! i (add1 i))
+          (printf "~a. " i)
+          (print prog)
+          (newline))))
+
     ;; Insert state-vec into forward equivlance classes.
     (define (class-insert! class live states-vec prog)
       (set! c-progs (add1 c-progs))
