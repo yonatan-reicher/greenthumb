@@ -3,10 +3,16 @@
 (require "inst.rkt" "decomposer.rkt" "ops-racket.rkt" "enumerator.rkt"
          "special.rkt" "memory-racket.rkt" "queue-racket.rkt")
 (require racket/generator)
+(require racket/struct)
 
 (provide forwardbackward% entry-live)
 
-(struct concat (collection inst))
+(struct concat (collection inst)
+  #:methods gen:custom-write
+  [(define write-proc
+     (make-constructor-style-printer
+       (lambda (obj) 'concat)
+       (lambda (obj) (list (concat-collection obj) (concat-inst obj)))))])
 (struct box (val))
 
 (define-syntax-rule (entry live prune) (list live prune))
