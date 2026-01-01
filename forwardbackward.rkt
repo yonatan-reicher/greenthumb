@@ -24,11 +24,11 @@
 ;; one for forward direction and another for backward direction.
 ;;
 ;; For forward direction: "classes"
-;;  classes     := (entry live1 pruning-info) -> nested hash
-;;                 where live1 is liveness from (udpate-live) method,
-;;                 and pruning-info is from (get-pruning-info) method
-;;  nested hash := progstate -> nested hash
-;;                 | set of programs
+;; Classes is a 3-nested hash table.
+;; 1. '(live1 pruning-info)
+;; 2. Starting program state
+;; 3. Next program state, after executing the instruction
+;; Leaf - Some (concat ..) struct that I don't yet quite understand.
 ;;
 ;; For backward direction: "classes-bw"
 ;;  classes-bw := (vector hash1 ...), where index = backward step
