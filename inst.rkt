@@ -1,8 +1,16 @@
 #lang racket
 
+(require racket/struct)
+
 (provide (all-defined-out))
 
-(struct inst (op args) #:mutable)
+(struct inst (op args)
+  #:mutable
+  #:methods gen:custom-write
+  [(define write-proc
+     (make-constructor-style-printer
+       (lambda (obj) 'inst)
+       (lambda (obj) (list (inst-op obj) (inst-args obj)))))])
 
 (define-syntax-rule (timeout sec expr)
   (let* ([t (let ([parent (current-thread)])
