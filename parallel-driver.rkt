@@ -155,7 +155,10 @@
                         (and (file-exists? name)
                              (create-stat-from-file name printer)))))
           (with-handlers* 
-           ([exn? (lambda (e) (pretty-display "Error: print stat"))])
+           ([exn? (lambda (e)
+                    (pretty-display "Error: print stat")
+                    (pretty-display e)
+                    )])
            (when (> cores-stoch 0)
                  (print-stat-all (filter identity (take stats cores-stoch)) printer))
            )
