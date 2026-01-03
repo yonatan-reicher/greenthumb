@@ -204,6 +204,16 @@
 
     ;; Insert state-vec into forward equivlance classes.
     (define (class-insert! class live states-vec prog)
+      (with-output-to-file "/root/projects/lens-sl/greenthumb/log.txt"
+        (lambda ()
+          (displayln "📊")
+          (print-classes class)
+          (displayln "Inserting 📥")
+          (printf "live: ~a\n" live)
+          (printf "states-vec: ~a\n" states-vec)
+          (printf "prog: ~a\n" prog))
+        #:exists 'append)
+
       (set! c-progs (add1 c-progs))
 
       (define (insert-inner x states-vec prog)
